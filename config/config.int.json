@@ -1,0 +1,8 @@
+{  
+  "app": {
+    "helloMessage": "This message comes from the INT config."
+  },
+  "logger": {
+    "level": "warning"
+  }
+}

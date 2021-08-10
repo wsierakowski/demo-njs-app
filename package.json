@@ -1,14 +1,25 @@
 {
-  "name": "grzyb_time_app",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "name": "demo-njs-app",
+  "version": "0.0.29",
+  "description": "Demo NodeJS app for k8s deployment",
+  "main": "app/index.js",
+  "type": "module",
   "scripts": {
+    "start": "node app/index.js",
+    "start:local": "cross-env NODE_ENV=local node app/index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "grzyb",
+  "author": "wsierakowski@gmail.com",
   "license": "ISC",
   "dependencies": {
-    "express": "^4.17.1"
+    "@cloudnative/health-connect": "^2.1.0",
+    "cross-env": "^6.0.3",
+    "koa": "^2.7.0",
+    "koa-pino-logger": "^3.0.0",
+    "koa-router": "^7.4.0",
+    "nconf": "^0.10.0",
+    "node-fetch": "^2.6.1",
+    "node-vault": "^0.9.21",
+    "pino": "^6.8.0"
   }
 }
