@@ -66,8 +66,10 @@ User data for app AMI on top of nodejs AMI:
 ```bash
 #!/bin/bash -xe
 exec > >(tee /var/log/user-data.log|logger -t user-data -s 2>/dev/console) 2>&1
+  cd /home/ec2-user
   git clone https://github.com/wsierakowski/demo-njs-app.git
   cd demo-njs-app
   npm i
   npm start
 ```
+
