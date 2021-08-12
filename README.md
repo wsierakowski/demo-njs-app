@@ -49,19 +49,25 @@ If the startup is set to be delayed, it can be resumed with the SIGCONT signal:
 User data for nodejs AMI:
 
 ```bash
-#!/bin/bash
-sudo yum update -y
-sudo yum install git -y
-curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.34.0/install.sh | bash
-. ~/.nvm/nvm.sh
-nvm install node
+#!/bin/bash -xe
+exec > >(tee /var/log/user-data.log|logger -t user-data -s 2>/dev/console) 2>&1
+  echo "Hello from user-data!"
+  sudo su
+  yum update -y
+  yum install git -y
+  curl --silent --location https://rpm.nodesource.com/setup_14.x | bash -
+  yum -y install nodejs
 ```
+
+See output log: /var/log/user-data.log
 
 User data for app AMI on top of nodejs AMI:
 
 ```bash
-git clone https://github.com/wsierakowski/demo-njs-app.git
-cd demo-njs-app
-npm i
-npm start
+#!/bin/bash -xe
+exec > >(tee /var/log/user-data.log|logger -t user-data -s 2>/dev/console) 2>&1
+  git clone https://github.com/wsierakowski/demo-njs-app.git
+  cd demo-njs-app
+  npm i
+  npm start
 ```
