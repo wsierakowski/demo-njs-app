@@ -12,6 +12,7 @@
   "author": "wsierakowski@gmail.com",
   "license": "ISC",
   "dependencies": {
+    "@aws-sdk/client-s3": "^3.26.0",
     "@cloudnative/health-connect": "^2.1.0",
     "cross-env": "^6.0.3",
     "koa": "^2.7.0",
