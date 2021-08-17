@@ -52,7 +52,8 @@ User data for nodejs AMI:
 #!/bin/bash -xe
 exec > >(tee /var/log/user-data.log|logger -t user-data -s 2>/dev/console) 2>&1
   echo "Hello from user-data!"
-  sudo su
+  # User data scripts are run as the root user, so do not use the sudo command in the script
+  # sudo su
   yum update -y
   yum install git -y
   curl --silent --location https://rpm.nodesource.com/setup_14.x | bash -
@@ -73,3 +74,11 @@ exec > >(tee /var/log/user-data.log|logger -t user-data -s 2>/dev/console) 2>&1
   npm start
 ```
 
+User data for NAT instance:
+
+```bash
+#!/bin/bash -xe
+exec > >(tee /var/log/user-data.log|logger -t user-data -s 2>/dev/console) 2>&1
+  sysctl -w net.ipv4.ip_forward=1
+  /sbin/iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE
+```
