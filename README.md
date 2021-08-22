@@ -46,7 +46,7 @@ If the startup is set to be delayed, it can be resumed with the SIGCONT signal:
 
 ## Deployment to AWS
 
-User data for nodejs AMI:
+### User data for nodejs AMI
 
 ```bash
 #!/bin/bash -xe
@@ -62,7 +62,7 @@ exec > >(tee /var/log/user-data.log|logger -t user-data -s 2>/dev/console) 2>&1
 
 See output log: /var/log/user-data.log
 
-User data for app AMI on top of nodejs AMI:
+### User data for app AMI on top of nodejs AMI
 
 ```bash
 #!/bin/bash -xe
@@ -74,11 +74,42 @@ exec > >(tee /var/log/user-data.log|logger -t user-data -s 2>/dev/console) 2>&1
   npm start
 ```
 
-User data for NAT instance:
+### User data for NAT instance
+
+Run once at launch:
 
 ```bash
 #!/bin/bash -xe
 exec > >(tee /var/log/user-data.log|logger -t user-data -s 2>/dev/console) 2>&1
   sysctl -w net.ipv4.ip_forward=1
   /sbin/iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE
+```
+
+Run also after restart
+
+```bash
+Content-Type: multipart/mixed; boundary="//"
+MIME-Version: 1.0
+
+--//
+Content-Type: text/cloud-config; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: attachment; filename="cloud-config.txt"
+
+#cloud-config
+cloud_final_modules:
+- [scripts-user, always]
+
+--//
+Content-Type: text/x-shellscript; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: attachment; filename="userdata.txt"
+
+#!/bin/bash -xe
+exec > >(tee /var/log/user-data.log|logger -t user-data -s 2>/dev/console) 2>&1
+  sysctl -w net.ipv4.ip_forward=1
+  /sbin/iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE
+--//--
 ```
