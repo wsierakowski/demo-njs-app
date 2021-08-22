@@ -6,6 +6,7 @@ import healthRoutes from './routes/health.js';
 import mainRoutes from './routes/main.js';
 import debugRoutes from './routes/debug.js';
 import awsRoutes from './routes/aws.js';
+import dbRoutes from './routes/db.js';
 import config from './utils/config.js';
 
 const app = new Koa();
@@ -40,6 +41,7 @@ router.use(mainRoutes.routes());
 router.use('/debug', debugRoutes.routes());
 router.use('/health', healthRoutes.routes());
 router.use('/aws', awsRoutes.routes());
+router.use('/db', dbRoutes.routes());
 app.use(router.routes());
 
 export default app;

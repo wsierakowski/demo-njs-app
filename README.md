@@ -44,6 +44,73 @@ If the startup is set to be delayed, it can be resumed with the SIGCONT signal:
 1. Check pid of the nodejs app process (` node index.js`): `kubectl exec <pod> -- ps aux`
 2. Send signal to that process: `kubectl exec <pod> -- kill -SIGCONT <pid>`
 
+## Running locally
+
+```
+$ npm run start:local
+```
+
+Docker-compose setup for Postgres is located in `local/` dir, run it with `$ docker-compose up`, then access pgadmin: [http://localhost:5050/](http://localhost:5050/).
+
+As per docker-compose.yaml configuration, logon to pgadmin:
+- username: `pgadmin4@pgadmin.org`
+- admin: `admin`
+
+Setup pgadmin connection with Postgres server:
+- host: `postgres`
+- username: `postgres`
+- password: `changeme`
+
+### Access psql
+
+```
+$ docker exec -it postgres_container psql --username postgres
+
+\conninfo
+You are connected to database "postgres" as user "postgres" via socket in "/var/run/postgresql" at port "5432".
+
+\du
+
+\list
+
+\dt
+
+\q
+```
+
+### Create a role
+
+```
+CREATE ROLE appdev WITH LOGIN PASSWORD 'changeme2';
+ALTER ROLE appdev CREATEDB;
+\du
+\q
+```
+
+### Create a db and a table
+
+```
+$ docker exec -it postgres_container bash
+$ psql -d postgres -U appdev
+
+CREATE DATABASE demo_njs_app;
+\list
+
+# Connect to the new db
+\c demo_njs_app
+
+CREATE TABLE books (
+  ID SERIAL PRIMARY KEY,
+  title VARCHAR(30),
+  description VARCHAR(200)
+);
+
+INSERT INTO books (title, description)
+  VALUES ('Rework', 'A better, faster, easier way to succeed in business.'), ('Deep Work', 'Rules for Focused Success in a Distracted World.');
+
+SELECT * FROM books;
+```
+
 ## Deployment to AWS
 
 ### User data for nodejs AMI

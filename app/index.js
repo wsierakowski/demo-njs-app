@@ -15,7 +15,7 @@ const initialize = async () => {
   // Launch server
   const initialInfo = {
     ...info,
-    status: "Just started..."
+    status: `Just started... Env: ${config.get('ENV')}`
   };
 
   let server;
