@@ -1,5 +1,6 @@
 import nconf from 'nconf';
 import bool from './bool.js';
+import { getDbSecret } from '../aws/secrets.js'
 
 nconf
   .use('memory') // https://github.com/indexzero/nconf/issues/197
@@ -37,4 +38,28 @@ nconf.get('STARTUP_DELAY') === undefined ?
   nconf.set('STARTUP_DELAY', 0) :
   nconf.set('STARTUP_DELAY', parseInt(nconf.get('STARTUP_DELAY')));
 
+const getAsyncConfigs = async () => {
+  // if env aws
+  /* 
+    {
+      "username":"postgres",
+      "password":"____",
+      "engine":"postgres",
+      "host":"wsi-psql-db.ck10rjmx409c.eu-west-2.rds.amazonaws.com",
+      "port":5432,
+      "dbInstanceIdentifier":"wsi-psql-db"
+    }
+  */
+  const dbSecretPayload = await getDbSecret();
+  const dbSecretPayloadObj = JSON.parse(dbSecretPayload);
+  nconf.set('db:host', dbSecretPayloadObj.host);
+  nconf.set('db:port', dbSecretPayloadObj.port);
+  nconf.set('db:database', 'demo_njs_app');
+  nconf.set('db:user', dbSecretPayloadObj.username);
+  nconf.set('db:password', dbSecretPayloadObj.password);
+}
+
+// getAsyncConfigs();
+
 export default nconf;
+export { getAsyncConfigs };

@@ -1,7 +1,7 @@
 import Router from 'koa-router';
 import logger from '../utils/logger.js';
 // import config from '../utils/config.js';
-import { s3 } from '../aws/index.js';
+import { s3 } from '../aws/s3.js';
 
 const router = new Router();
 const params = {

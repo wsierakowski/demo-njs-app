@@ -3,6 +3,7 @@ import os from 'os';
 import Pino from 'pino';
 import app from './app.js';
 import config from './utils/config.js';
+import { getAsyncConfigs } from './utils/config.js';
 import { getInfo } from './info/index.js';
 
 const pino = Pino();
@@ -10,6 +11,7 @@ const PORT = config.get('PORT') || 3000;
 
 const initialize = async () => {
 
+  await getAsyncConfigs();
   const info = await getInfo();
 
   // Launch server

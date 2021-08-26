@@ -1,11 +1,12 @@
 import Router from 'koa-router';
 import logger from '../utils/logger.js';
-import pgPool from '../db/pgpool.js';
+import { getPool } from '../utils/pgpool.js';
 
 const router = new Router();
 
 router.get('/list', async ctx => {
   try {
+    const pgPool = getPool();
     const results = await pgPool.query('SELECT * FROM books ORDER BY id ASC');
     ctx.body = results.rows;
   } catch (err) {
