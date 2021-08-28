@@ -52,7 +52,7 @@ const getAsyncConfigs = async () => {
   */
   const dbSecretPayload = await getDbSecret();
   const dbSecretPayloadObj = JSON.parse(dbSecretPayload);
-  if (nconf.get('ENV') !== 'local') {
+  if (nconf.get('ENV') !== 'local' && dbSecretPayloadObj) {
     nconf.set('db:host', dbSecretPayloadObj.host);
     nconf.set('db:port', dbSecretPayloadObj.port);
     nconf.set('db:database', 'demo_njs_app');

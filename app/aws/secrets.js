@@ -1,4 +1,5 @@
 import * as AWS from '@aws-sdk/client-secrets-manager';
+import logger from '../utils/logger.js';
 
 // https://docs.aws.amazon.com/AWSJavaScriptSDK/v3/latest/clients/client-secrets-manager/classes/getsecretvaluecommand.html
 
@@ -44,6 +45,7 @@ const getDbSecret = async () => {
     return secret && secret.SecretString || null;
 
   } catch (err) {
+    logger.error({msg: `error obtaining db credentials from AWS`, err});
     if (err.code === 'DecryptionFailureException')
       // Secrets Manager can't decrypt the protected secret text using the provided KMS key.
       // Deal with the exception here, and/or rethrow at your discretion.
@@ -64,6 +66,12 @@ const getDbSecret = async () => {
       // We can't find the resource that you asked for.
       // Deal with the exception here, and/or rethrow at your discretion.
       throw err;
+    else if (err.code === 'AccessDeniedException')
+      // We can't find the resource that you asked for.
+      // Deal with the exception here, and/or rethrow at your discretion.
+      throw err;
+    
+    return null;
   }
 }
 
