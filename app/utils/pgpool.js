@@ -13,7 +13,7 @@ const getPool = () => {
       password: config.get('db:password')
     };
     pool = new Pool(params);
-    console.log('---> SETTING UP PGPOOL');
+    console.log('---> SETTING UP PGPOOL for params:', params);
   }
   return pool;
 }

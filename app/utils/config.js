@@ -52,11 +52,13 @@ const getAsyncConfigs = async () => {
   */
   const dbSecretPayload = await getDbSecret();
   const dbSecretPayloadObj = JSON.parse(dbSecretPayload);
-  nconf.set('db:host', dbSecretPayloadObj.host);
-  nconf.set('db:port', dbSecretPayloadObj.port);
-  nconf.set('db:database', 'demo_njs_app');
-  nconf.set('db:user', dbSecretPayloadObj.username);
-  nconf.set('db:password', dbSecretPayloadObj.password);
+  if (nconf.get('ENV') !== 'local') {
+    nconf.set('db:host', dbSecretPayloadObj.host);
+    nconf.set('db:port', dbSecretPayloadObj.port);
+    nconf.set('db:database', 'demo_njs_app');
+    nconf.set('db:user', dbSecretPayloadObj.username);
+    nconf.set('db:password', dbSecretPayloadObj.password);
+  }
 }
 
 // getAsyncConfigs();
