@@ -87,6 +87,13 @@ ALTER ROLE appdev CREATEDB;
 \q
 ```
 
+To grant select and insert privileges:
+
+```sql
+GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO appdev;
+GRANT ALL PRIVILEGES ON ALL SEQUENCES IN SCHEMA public TO appdev;
+```
+
 ### Create a db and a table
 
 ```

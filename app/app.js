@@ -2,6 +2,7 @@ import Koa from 'koa';
 import pino from 'pino';
 import logger from 'koa-pino-logger'
 import Router from 'koa-router';
+import bodyParser from 'koa-bodyparser';
 import healthRoutes from './routes/health.js';
 import mainRoutes from './routes/main.js';
 import debugRoutes from './routes/debug.js';
@@ -22,6 +23,7 @@ app.use(async (ctx, next) => {
   }
 });
 
+app.use(bodyParser({emableTypes: ['json', 'text']}));
 
 // app.use(async (ctx, next) => {
 //   console.log(

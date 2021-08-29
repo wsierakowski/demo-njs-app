@@ -6,8 +6,8 @@
     "level": "debug"
   },
   "db": {
-    "user": "appdev",
-    "password": "changeme2",
+    "user": "postgres",
+    "password": "changeme",
     "host": "localhost",
     "database": "demo_njs_app",
     "port": 5432
