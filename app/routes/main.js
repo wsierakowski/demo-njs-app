@@ -5,6 +5,7 @@ import config from '../utils/config.js';
 import * as infos from '../info/index.js';
 
 const router = new Router();
+let counter = 0;
 
 router.get('/', async ctx => {
   ctx.status = 200;
@@ -24,6 +25,15 @@ router.get('/info', async ctx => {
     info,
     message
   }
+});
+
+router.get('/counter', async ctx => {
+  counter++;
+  if (counter >= Number.MAX_SAFE_INTEGER) counter = 0;
+  ctx.body = {
+    counter
+  };
+  ctx.status = 200;
 });
 
 router.get('/info/vault', async ctx => {

@@ -10,6 +10,7 @@ The application exposes the following endpoints:
 - GET `/info/vault` or `/info/vault` prints:
   - secrets read from Vault
   - config from ConfigMap/Consul
+- GET `/counter` returns number of times this endpoint was checked so far
 - GET `/ping?size=50&delay=5000` prints a string of a given number of characters specified with `size` parameter with a response returned after a delay in miliseconds specified with `delay` parameter
 - GET `/upstream` calls upstream service to get the count of lookup calls
   - requires two params: `service` and `endpoint`
@@ -61,7 +62,7 @@ Setup pgadmin connection with Postgres server:
 - username: `postgres`
 - password: `changeme`
 
-### Access psql
+### Access psql locally with Docker
 
 ```
 $ docker exec -it postgres_container psql --username postgres
@@ -76,6 +77,14 @@ You are connected to database "postgres" as user "postgres" via socket in "/var/
 \dt
 
 \q
+```
+
+### Access database from another EC2 instance
+
+Access to a non-public RDS is possible providing an EC2 from which we want to access is in the same VPC and route, NACL and SG allow it.
+
+```
+$ psql --host=<IP_or_endpoint_url> --username=postgres
 ```
 
 ### Create a role
@@ -123,8 +132,6 @@ Or execute:
 ```
 $ docker exec -i postgres_container psql --username postgres < local/db/schema.sql
 ```
-
-ojsmPpy85bFqSKtPPFCb
 
 Access secret:
 
@@ -185,6 +192,17 @@ client.getSecretValue({SecretId: secretName}, function(err, data) {
     
     // Your code goes here. 
 });
+```
+
+### Testing
+
+```bash
+curl --location --request POST 'https://hahment.com/db/insert' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "title": "Grzyby",
+    "description": "A book about strangest mushrooms"
+}'
 ```
 
 ## Deployment to AWS
