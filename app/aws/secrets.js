@@ -4,7 +4,7 @@ import logger from '../utils/logger.js';
 // https://docs.aws.amazon.com/AWSJavaScriptSDK/v3/latest/clients/client-secrets-manager/classes/getsecretvaluecommand.html
 
 const region = 'eu-west-2';
-const secretName = 'wsi-psql-db';
+const secretName = 'demo-psql-db';
 
 // Create a Secrets Manager client
 const client = new AWS.SecretsManager({ region });
