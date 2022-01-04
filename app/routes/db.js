@@ -6,7 +6,7 @@ const router = new Router();
 
 router.get('/list', async ctx => {
   try {
-    const pgPool = getPool();
+    const pgPool = await getPool();
     const results = await pgPool.query('SELECT * FROM books ORDER BY id ASC');
     ctx.body = results.rows;
   } catch (err) {
@@ -28,7 +28,7 @@ router.post('/insert', async ctx => {
       ctx.body = {msg: `'title' and 'description' are required`};
       return;
     }
-    const pgPool = getPool();
+    const pgPool = await getPool();
     const results = await pgPool.query('INSERT INTO books (title, description) VALUES ($1, $2) RETURNING id', [title, description]);
     ctx.status = 201;
     ctx.body = {
