@@ -3,7 +3,8 @@ import logger from '../utils/logger.js';
 
 // https://docs.aws.amazon.com/AWSJavaScriptSDK/v3/latest/clients/client-secrets-manager/classes/getsecretvaluecommand.html
 
-const region = 'eu-west-2';
+// SDK will read region from AWS_REGION variable that we added in user-data script
+const region = null; //'eu-west-2';
 const secretName = 'demo-psql-db';
 
 // Create a Secrets Manager client
