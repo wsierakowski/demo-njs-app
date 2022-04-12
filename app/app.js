@@ -23,7 +23,7 @@ app.use(async (ctx, next) => {
   }
 });
 
-app.use(bodyParser({emableTypes: ['json', 'text']}));
+app.use(bodyParser({enableTypes: ['json', 'text']}));
 
 // app.use(async (ctx, next) => {
 //   console.log(
@@ -42,7 +42,7 @@ const router = new Router();
 router.use(mainRoutes.routes());
 router.use('/debug', debugRoutes.routes());
 router.use('/health', healthRoutes.routes());
-router.use('/aws', awsRoutes.routes());
+if (config.get('AWS_ON')) router.use('/aws', awsRoutes.routes());
 router.use('/db', dbRoutes.routes());
 app.use(router.routes());
 

@@ -1,6 +1,6 @@
 # demo-njs-app
 
-A simple NodeJS app based on Koa useful for environment testing purposes.
+A simple and lightweight Node.JS app running on [Koa.JS](https://koajs.com/) for testing various infrastructure deployment environments.
 
 The application exposes the following endpoints:
 
@@ -11,7 +11,7 @@ The application exposes the following endpoints:
   - secrets read from Vault
   - config from ConfigMap/Consul
 - GET `/counter` returns number of times this endpoint was checked so far
-- GET `/ping?size=50&delay=5000` prints a string of a given number of characters specified with `size` parameter with a response returned after a delay in miliseconds specified with `delay` parameter
+- GET `/ping?size=50&delay=5000` prints a string of a given number of characters specified with `size` parameter with a response returned after a delay in milliseconds specified with `delay` parameter
 - GET `/upstream` calls upstream service to get the count of lookup calls
   - requires two params: `service` and `endpoint`
 - GET `/health` 
@@ -28,7 +28,7 @@ The application exposes the following endpoints:
   - GET `debug/health/probelogging`: gets current probe logging status
   - POST `debug/health/probelogging/{0/1}`: enables or disables logging for health paths (disabled by default)
   - GET `debug/shutdowndelay`: gets current shutdown delay value
-  - POST `debug/shutdowndelay/1000`: enables shutdown delay for x miliseconds (1000 in this case), useful for testing pod behavior when shutting down the container
+  - POST `debug/shutdowndelay/1000`: enables shutdown delay for x milliseconds (1000 in this case), useful for testing pod behavior when shutting down the container
   - POST `debug/cputask/10000`: starts a CPU intensive task for x amount of ms (testing CPU throttling)
   - POST `debug/memalloc/512`: allocates x MBs to memory (testing OOM)
   - POST `debug/memclear`: clears previously created allocations from memory
@@ -38,12 +38,31 @@ Startup, readiness, liveness endpoints and probe logging can be also enabled or 
 - `READY_ON` (`"true"`/`"1"`/`"false"`/`"0"`)
 - `LIVE_ON` (`"true"`/`"1"`/`"false"`/`"0"`)
 - `PROBE_LOGGING_ON` (`"true"`/`"1"`/`"false"`/`"0"`)
-- `SHUTDOWN_DELAY` (int value in miliseconds, i.e. `1000`)
-- `STARTUP_DELAY` (int value in miliseconds, i.e. `1000`)
+- `SHUTDOWN_DELAY` (int value in milliseconds, i.e. `1000`)
+- `STARTUP_DELAY` (int value in milliseconds, i.e. `1000`)
+
+AWS support is disabled by default and can enabled with `AWS_ON` env var set to `true`.
+Vault and Consul support is disabled by default and can be enabled with `VAULT_CONSUL_ON` env var set to `true`.
 
 If the startup is set to be delayed, it can be resumed with the SIGCONT signal:
 1. Check pid of the nodejs app process (` node index.js`): `kubectl exec <pod> -- ps aux`
 2. Send signal to that process: `kubectl exec <pod> -- kill -SIGCONT <pid>`
+
+## Docker image
+
+The docker image with this app has been published to the public registry [here](https://hub.docker.com/repository/docker/wsierakowski/demo-njs-app).
+
+You can also build the image locally with the following command:
+
+```
+$ docker build -f Dockerfile -t <your-registry-name>/demo-njs-app:1.0.0 .
+```
+
+And then run in the following way:
+
+```
+$ docker run --rm --name demo-njs-app -p 8080:8080 -e PORT=8080 -e ENV=local <your-registry-name>/demo-njs-app:1.0.0
+```
 
 ## Running locally
 
@@ -206,6 +225,8 @@ curl --location --request POST 'https://hahment.com/db/insert' \
 ```
 
 ## Deployment to AWS
+
+Enable AWS support in the app by setting the following env var:  `AWS_ON=true`.
 
 ### User data for nodejs AMI
 

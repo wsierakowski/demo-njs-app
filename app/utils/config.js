@@ -38,6 +38,12 @@ nconf.get('STARTUP_DELAY') === undefined ?
   nconf.set('STARTUP_DELAY', 0) :
   nconf.set('STARTUP_DELAY', parseInt(nconf.get('STARTUP_DELAY')));
 
+// AWS support disabled by default
+if (nconf.get('AWS_ON') === undefined) nconf.set('AWS_ON', false);
+
+// Vault and Consul support disabled by default
+if (nconf.get('VAULT_CONSUL_ON') === undefined) nconf.set('VAULT_CONSUL_ON', false);
+
 const getAsyncConfigs = async () => {
   // if env aws
   /* 

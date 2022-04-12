@@ -1,4 +1,5 @@
 import * as AWS from '@aws-sdk/client-secrets-manager';
+import config from '../utils/config.js';
 import logger from '../utils/logger.js';
 
 // https://docs.aws.amazon.com/AWSJavaScriptSDK/v3/latest/clients/client-secrets-manager/classes/getsecretvaluecommand.html
@@ -11,6 +12,7 @@ const secretName = 'demo-psql-db';
 const client = new AWS.SecretsManager({ region });
 
 const getDbSecret = async () => {
+  if (!config.get('AWS_ON')) return null;
   try {
     const secret = await client.getSecretValue({SecretId: secretName});
 

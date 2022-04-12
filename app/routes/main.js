@@ -40,7 +40,12 @@ router.get('/info/vault', async ctx => {
   const message = `Received request from "` + 
                     `${ctx.request.ip} + "."`;
 
-  const info = await infos.getVaultConsul();
+  let info;
+
+  if (config.get('VAULT_CONSUL_ON'))
+    info = await infos.getVaultConsul();
+  else
+    info = "Vault and Consul disabled.";
 
   ctx.status = 200;
   ctx.body = {
@@ -53,7 +58,12 @@ router.get('/info/consul', async ctx => {
   const message = `Received request from "` + 
                     `${ctx.request.ip} + "."`;
 
-  const info = await infos.getVaultConsul();
+  let info;
+
+  if (config.get('VAULT_CONSUL_ON'))
+    info = await infos.getVaultConsul();
+  else
+    info = "Vault and Consul disabled.";
 
   ctx.status = 200;
   ctx.body = {

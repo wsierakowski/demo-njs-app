@@ -11,10 +11,13 @@ const team = 'team_wsi';
 const stage = 'dev';
 
 let jwt;
-try {
-  jwt = fs.readFileSync('/var/run/secrets/kubernetes.io/serviceaccount/token', 'utf8');
-} catch (err) {
-  logger.info({ msg: 'Error getting JWT token', err });
+
+if (config.get('VAULT_CONSUL_ON')) {
+  try {
+    jwt = fs.readFileSync('/var/run/secrets/kubernetes.io/serviceaccount/token', 'utf8');
+  } catch (err) {
+    logger.info({ msg: 'Error getting JWT token', err });
+  }
 }
 
 const getVaultSecret = async (key) => {
